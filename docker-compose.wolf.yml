@@ -36,9 +36,8 @@ services:
     user: "0:0"
     environment:
       - WOLF_SOCKET_PATH=/var/run/wolf/wolf.sock
-      - ASPNETCORE_URLS=http://+:8085
-      - ASPNETCORE_HTTP_PORTS=8085
-      - PORT=8085
+      - ASPNETCORE_URLS=http://+:9085
+      - PORT=9085
     volumes:
       - wolf-config:/etc/wolf
       - /var/run/wolf:/var/run/wolf
