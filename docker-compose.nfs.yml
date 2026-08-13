@@ -1,0 +1,44 @@
+version: "3.8"
+
+services:
+  sunshine:
+    image: lizardbyte/sunshine:latest
+    container_name: sunshine-emulator-stack
+    restart: unless-stopped
+    privileged: true
+    network_mode: host
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ:-America/New_York}
+      - SUNSHINE_USER=${SUNSHINE_USER:-admin}
+      - SUNSHINE_PASS=${SUNSHINE_PASS:-admin123}
+      - DISPLAY=:0
+    volumes:
+      - ./config/sunshine:/config
+      - ./config/es-de:/home/sunshine/.emulationstation
+      - nfs-roms-storage:/roms
+      - nfs-bios-storage:/bios
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    devices:
+      - /dev/dri:/dev/dri
+      - /dev/uinput:/dev/uinput
+      - /dev/input:/dev/input
+    shm_size: "2gb"
+
+volumes:
+  nfs-roms-storage:
+    name: nfs_emulator_roms
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_SERVER_IP},rw,soft,nolock,timeo=30"
+      device: ":${NFS_ROMS_PATH}" # e.g. :/volume1/roms
+
+  nfs-bios-storage:
+    name: nfs_emulator_bios
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=${NFS_SERVER_IP},rw,soft,nolock,timeo=30"
+      device: ":${NFS_BIOS_PATH}" # e.g. :/volume1/bios

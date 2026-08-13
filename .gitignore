@@ -1,0 +1,14 @@
+# Environment and secret files
+.env
+*.env
+*.log
+
+# Sunshine local generated pairing keys
+config/sunshine/sunshine.pem
+config/sunshine/sunshine.crt
+config/sunshine/sunshine.state
+
+# OS & Temp files
+.DS_Store
+Thumbs.db
+/tmp/

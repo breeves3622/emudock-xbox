@@ -1,0 +1,21 @@
+{
+  "env": {
+    "PATH": "$(PATH):/usr/local/bin:/usr/bin:/bin"
+  },
+  "apps": [
+    {
+      "name": "EmulationStation-DE",
+      "output": "es-de.log",
+      "cmd": "emulationstation",
+      "working-dir": "/home/sunshine",
+      "auto-detach": "true",
+      "image-path": "es-de.png"
+    },
+    {
+      "name": "Desktop / Steam Big Picture",
+      "cmd": "steam -gamepadui",
+      "working-dir": "/home/sunshine",
+      "auto-detach": "true"
+    }
+  ]
+}

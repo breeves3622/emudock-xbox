@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  sunshine:
+    image: lizardbyte/sunshine:latest
+    container_name: sunshine-emulator-stack
+    restart: unless-stopped
+    privileged: true
+    network_mode: host
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ:-America/New_York}
+      - SUNSHINE_USER=${SUNSHINE_USER:-admin}
+      - SUNSHINE_PASS=${SUNSHINE_PASS:-admin123}
+      - DISPLAY=:0
+      - NVIDIA_VISIBLE_DEVICES=${NVIDIA_VISIBLE_DEVICES:-all}
+      - NVIDIA_DRIVER_CAPABILITIES=${NVIDIA_DRIVER_CAPABILITIES:-all}
+    volumes:
+      - ./config/sunshine:/config
+      - ./config/es-de:/home/sunshine/.emulationstation
+      - roms-storage:/roms
+      - bios-storage:/bios
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    devices:
+      - /dev/dri:/dev/dri # Intel/AMD integrated or dedicated GPU
+      - /dev/uinput:/dev/uinput # Controller input forwarding
+      - /dev/input:/dev/input # Input devices
+    shm_size: "2gb"
+
+volumes:
+  roms-storage:
+    name: emulator_roms
+  bios-storage:
+    name: emulator_bios

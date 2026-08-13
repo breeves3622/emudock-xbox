@@ -1,0 +1,60 @@
+version: "3.8"
+
+services:
+  romm:
+    image: ghcr.io/rommapp/romm:latest
+    container_name: romm-stack
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_HOST=romm-db
+      - DB_NAME=romm
+      - DB_USER=romm_user
+      - DB_PASSWD=${DB_PASSWORD:-romm_secure_password}
+      - ROMM_AUTH_SECRET_KEY=${AUTH_SECRET_KEY:-generate_a_random_32_char_key_here}
+      - IGDB_CLIENT_ID=${IGDB_CLIENT_ID:-}
+      - IGDB_CLIENT_SECRET=${IGDB_CLIENT_SECRET:-}
+      - REDIS_HOST=romm-redis
+      - REDIS_PORT=6379
+    volumes:
+      - ./config/romm/resources:/romm/resources
+      - smb-roms-storage:/roms
+    depends_on:
+      romm-db:
+        condition: service_healthy
+      romm-redis:
+        condition: service_started
+
+  romm-db:
+    image: mariadb:10.11
+    container_name: romm-db
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD:-root_secure_password}
+      - MYSQL_DATABASE=romm
+      - MYSQL_USER=romm_user
+      - MYSQL_PASSWORD=${DB_PASSWORD:-romm_secure_password}
+    volumes:
+      - ./config/romm/db:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  romm-redis:
+    image: redis:7-alpine
+    container_name: romm-redis
+    restart: unless-stopped
+    volumes:
+      - ./config/romm/redis:/data
+
+volumes:
+  smb-roms-storage:
+    name: smb_emulator_roms
+    driver: local
+    driver_opts:
+      type: cifs
+      o: "username=${SMB_USER},password=${SMB_PASS},domain=${SMB_DOMAIN:-WORKGROUP},uid=1000,gid=1000,vers=3.0"
+      device: "${SMB_ROMS_PATH}"

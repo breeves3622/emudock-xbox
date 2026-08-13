@@ -1,0 +1,44 @@
+version: "3.8"
+
+services:
+  sunshine:
+    image: lizardbyte/sunshine:latest
+    container_name: sunshine-emulator-stack
+    restart: unless-stopped
+    privileged: true
+    network_mode: host
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ:-America/New_York}
+      - SUNSHINE_USER=${SUNSHINE_USER:-admin}
+      - SUNSHINE_PASS=${SUNSHINE_PASS:-admin123}
+      - DISPLAY=:0
+    volumes:
+      - ./config/sunshine:/config
+      - ./config/es-de:/home/sunshine/.emulationstation
+      - smb-roms-storage:/roms
+      - smb-bios-storage:/bios
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    devices:
+      - /dev/dri:/dev/dri
+      - /dev/uinput:/dev/uinput
+      - /dev/input:/dev/input
+    shm_size: "2gb"
+
+volumes:
+  smb-roms-storage:
+    name: smb_emulator_roms
+    driver: local
+    driver_opts:
+      type: cifs
+      o: "username=${SMB_USER},password=${SMB_PASS},domain=${SMB_DOMAIN:-WORKGROUP},uid=${PUID:-1000},gid=${PGID:-1000},vers=3.0"
+      device: "${SMB_ROMS_PATH}" # e.g. //192.168.1.50/roms
+
+  smb-bios-storage:
+    name: smb_emulator_bios
+    driver: local
+    driver_opts:
+      type: cifs
+      o: "username=${SMB_USER},password=${SMB_PASS},domain=${SMB_DOMAIN:-WORKGROUP},uid=${PUID:-1000},gid=${PGID:-1000},vers=3.0"
+      device: "${SMB_BIOS_PATH}" # e.g. //192.168.1.50/bios

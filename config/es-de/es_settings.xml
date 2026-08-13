@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<config>
+    <string name="ROMDirectory" value="/roms" />
+    <string name="MediaDirectory" value="/roms/downloaded_media" />
+    <string name="ThemeSet" value="ES-DE Modern" />
+    <string name="Scraper" value="ScreenScraper" />
+    <bool name="ScrapeRatings" value="true" />
+    <bool name="ScrapeVideos" value="true" />
+    <bool name="ShowHelpPrompts" value="true" />
+    <bool name="ParseGamelistOnly" value="false" />
+    <string name="UIMode" value="Full" />
+    <string name="GamelistViewStyle" value="automatic" />
+    <bool name="EnableSound" value="true" />
+</config>
