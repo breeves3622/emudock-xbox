@@ -31,5 +31,5 @@ volumes:
     driver: local
     driver_opts:
       type: cifs
-      o: "username=${SMB_USER},password=${SMB_PASS},domain=${SMB_DOMAIN:-WORKGROUP},uid=1000,gid=1000,vers=3.0"
-      device: "${SMB_ROMS_PATH}"
+      o: "username=${SMB_USER:-guest},password=${SMB_PASS:-},guest,uid=${PUID:-1000},gid=${PGID:-1000},vers=3.0"
+      device: "${SMB_ROMS_PATH:-//10.80.1.50/Public/roms}"

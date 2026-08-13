@@ -1,6 +1,6 @@
 # EmuDock Xbox Stack: Dockerized Emulator Host with ES-DE Frontend & Wolf / Sunshine
 
-A complete, self-hosted Docker gaming stack hosted on GitHub and deployed via **Portainer**. Built for playing modern emulated games (PS2, PS3, GameCube, Wii, Switch, N64, SNES, Arcade) on an **Xbox One / Xbox Series X|S** console with **EmulationStation Desktop Edition (ES-DE)** as a 10-foot TV frontend, reading ROMs from a network drive (SMB/CIFS or NFS).
+A complete, self-hosted Docker gaming stack hosted on GitHub and deployed via **Portainer**. Built for playing modern emulated games (PS2, PS3, GameCube, Wii, Switch, N64, SNES, Arcade) on an **Xbox One / Xbox Series X|S** console with **EmulationStation Desktop Edition (ES-DE)** as a 10-foot TV frontend, reading ROMs from your network drive (`\\10.80.1.50\Public`).
 
 ---
 
@@ -24,8 +24,8 @@ A complete, self-hosted Docker gaming stack hosted on GitHub and deployed via **
 ```
 .
 ├── docker-compose.yml          # Primary Sunshine + ES-DE Stack
-├── docker-compose.wolf.yml     # Games on Whales Wolf Docker-Native Stack
-├── docker-compose.smb.yml      # SMB/CIFS Network Storage Compose Override
+├── docker-compose.wolf.yml     # Games on Whales Wolf Docker-Native Stack (Guest SMB Pre-configured)
+├── docker-compose.smb.yml      # SMB/CIFS Network Storage Compose Override (Guest SMB Pre-configured)
 ├── docker-compose.nfs.yml      # NFS Network Storage Compose Override
 ├── docker-compose.romm.yml     # Alternative RomM + EmulatorJS Web Stack
 ├── .env.example                # Portainer Environment Variables Template
@@ -42,31 +42,51 @@ A complete, self-hosted Docker gaming stack hosted on GitHub and deployed via **
 ## 🚀 Portainer Deployment Guide
 
 ### Step 1: Clone Repository to GitHub
-Push this repository to your personal **GitHub** account.
+Push this repository to your personal **GitHub** account (`https://github.com/breeves3622/emudock-xbox`).
 
 ### Step 2: Add Stack in Portainer
 1. Open **Portainer** (`http://<YOUR_PORTAINER_IP>:9000`).
 2. Navigate to **Stacks** > **+ Add stack**.
 3. Select **Repository** method.
-4. Enter your GitHub Repository URL.
+4. Enter your GitHub Repository URL (`https://github.com/breeves3622/emudock-xbox.git`).
 5. Set **Compose path**:
    - `docker-compose.wolf.yml` (for **Wolf / Games on Whales**)
-   - `docker-compose.smb.yml` (for **Sunshine + SMB**)
+   - `docker-compose.smb.yml` (for **Sunshine + Guest SMB Share**)
    - `docker-compose.nfs.yml` (for **Sunshine + NFS**)
 
 ### Step 3: Configure Environment Variables in Portainer
-Scroll down to **Environment variables** in Portainer and load keys from `.env.example`:
+Environment variables are pre-configured for Guest access on `\\10.80.1.50\Public`:
 
-| Environment Variable | Example Value | Description |
+| Environment Variable | Pre-configured Default | Description |
 | :--- | :--- | :--- |
-| `SMB_USER` | `nas_user` | Network share username |
-| `SMB_PASS` | `secret123` | Network share password |
-| `SMB_ROMS_PATH` | `//192.168.1.50/roms` | UNC Path to your ROM directory |
+| `SMB_USER` | `guest` | Network share username |
+| `SMB_PASS` | *(blank)* | Guest network share password |
+| `SMB_ROMS_PATH` | `//10.80.1.50/Public/roms` | UNC Path to your ROM directory |
+| `SMB_BIOS_PATH` | `//10.80.1.50/Public/bios` | UNC Path to your BIOS directory |
 | `SUNSHINE_USER` | `admin` | Sunshine Web Dashboard username |
-| `SUNSHINE_PASS` | `password123` | Sunshine Web Dashboard password |
+| `SUNSHINE_PASS` | `admin123` | Sunshine Web Dashboard password |
 
 ### Step 4: Deploy Stack
-Click **Deploy the stack**. Portainer will launch the container stack and mount your network ROM drive.
+Click **Deploy the stack**. Portainer will launch the container stack and mount your `\\10.80.1.50\Public` network share.
+
+---
+
+## 📁 Recommended Network ROM Storage Folder Structure
+
+On your `\\10.80.1.50\Public` share, place your ROMs inside `/roms`:
+
+```
+\\10.80.1.50\Public\roms\
+  ├── ps2/            # PlayStation 2 (.iso, .chd)
+  ├── ps3/            # PlayStation 3 (.pkg, folder)
+  ├── gc/             # GameCube (.rvz, .iso)
+  ├── wii/            # Nintendo Wii (.rvz, .iso)
+  ├── switch/         # Nintendo Switch (.nsp, .xci)
+  ├── n64/            # Nintendo 64 (.z64, .n64)
+  ├── snes/           # Super Nintendo (.sfc, .smc)
+  ├── megadrive/      # Sega Genesis / Mega Drive (.md)
+  └── arcade/         # MAME / Arcade (.zip)
+```
 
 ---
 

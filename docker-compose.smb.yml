@@ -32,13 +32,13 @@ volumes:
     driver: local
     driver_opts:
       type: cifs
-      o: "username=${SMB_USER},password=${SMB_PASS},domain=${SMB_DOMAIN:-WORKGROUP},uid=${PUID:-1000},gid=${PGID:-1000},vers=3.0"
-      device: "${SMB_ROMS_PATH}" # e.g. //192.168.1.50/roms
+      o: "username=${SMB_USER:-guest},password=${SMB_PASS:-},guest,uid=${PUID:-1000},gid=${PGID:-1000},vers=3.0"
+      device: "${SMB_ROMS_PATH:-//10.80.1.50/Public/roms}"
 
   smb-bios-storage:
     name: smb_emulator_bios
     driver: local
     driver_opts:
       type: cifs
-      o: "username=${SMB_USER},password=${SMB_PASS},domain=${SMB_DOMAIN:-WORKGROUP},uid=${PUID:-1000},gid=${PGID:-1000},vers=3.0"
-      device: "${SMB_BIOS_PATH}" # e.g. //192.168.1.50/bios
+      o: "username=${SMB_USER:-guest},password=${SMB_PASS:-},guest,uid=${PUID:-1000},gid=${PGID:-1000},vers=3.0"
+      device: "${SMB_BIOS_PATH:-//10.80.1.50/Public/bios}"
