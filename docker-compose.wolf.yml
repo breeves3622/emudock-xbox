@@ -13,8 +13,10 @@ services:
       - TZ=${TZ:-America/New_York}
       - WOLF_RENDER_NODE=/dev/dri/renderD128
       - WOLF_ENCODER_NODE=/dev/dri/renderD128
+      - WOLF_SOCKET_PATH=/var/run/wolf/wolf.sock
     volumes:
       - wolf-config:/etc/wolf
+      - /var/run/wolf:/var/run/wolf
       - /var/run/docker.sock:/var/run/docker.sock:rw
       - /dev/:/dev/:rw
       - /run/udev:/run/udev:rw
@@ -27,15 +29,16 @@ services:
       - /dev/uhid:/dev/uhid
 
   wolf-den:
-    image: ghcr.io/games-on-whales/wolf-den:latest
+    image: ghcr.io/games-on-whales/wolf-den:stable
     container_name: wolf-den-ui
     network_mode: host
     restart: unless-stopped
+    environment:
+      - WOLF_SOCKET_PATH=/var/run/wolf/wolf.sock
     volumes:
       - wolf-config:/etc/wolf
+      - /var/run/wolf:/var/run/wolf
       - /var/run/docker.sock:/var/run/docker.sock:rw
-    environment:
-      - PORT=8085
 
 volumes:
   wolf-config:
