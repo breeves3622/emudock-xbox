@@ -1,6 +1,6 @@
 # EmuDock Xbox Stack: Dockerized Emulator Host with ES-DE Frontend & Wolf / Sunshine
 
-A complete, self-hosted Docker gaming stack hosted on GitHub and deployed via **Portainer**. Built for playing modern emulated games (PS2, PS3, GameCube, Wii, Switch, N64, SNES, Arcade) on an **Xbox One / Xbox Series X|S** console with **EmulationStation Desktop Edition (ES-DE)** as a 10-foot TV frontend, reading ROMs from your network drive (`\\10.80.1.50\Public`).
+A complete, self-hosted Docker gaming stack hosted on GitHub and deployed via **Portainer**. Built for playing modern emulated games (PS2, PS3, GameCube, Wii, Switch, N64, SNES, Arcade) on an **Xbox One / Xbox Series X|S** console with **EmulationStation Desktop Edition (ES-DE)** as a 10-foot TV frontend, reading ROMs from your network drive (`\\10.80.1.50\Public\Emulator\Roms`).
 
 ---
 
@@ -55,28 +55,29 @@ Push this repository to your personal **GitHub** account (`https://github.com/br
    - `docker-compose.nfs.yml` (for **Sunshine + NFS**)
 
 ### Step 3: Configure Environment Variables in Portainer
-Environment variables are pre-configured for Guest access on `\\10.80.1.50\Public`:
+Environment variables are pre-configured for Guest access on `\\10.80.1.50\Public\Emulator\Roms`:
 
 | Environment Variable | Pre-configured Default | Description |
 | :--- | :--- | :--- |
 | `SMB_USER` | `guest` | Network share username |
 | `SMB_PASS` | *(blank)* | Guest network share password |
-| `SMB_ROMS_PATH` | `//10.80.1.50/Public/roms` | UNC Path to your ROM directory |
-| `SMB_BIOS_PATH` | `//10.80.1.50/Public/bios` | UNC Path to your BIOS directory |
+| `SMB_ROMS_PATH` | `//10.80.1.50/Public/Emulator/Roms` | UNC Path to your ROM directory |
+| `SMB_BIOS_PATH` | `//10.80.1.50/Public/Emulator/Roms/bios` | UNC Path to your BIOS directory |
 | `SUNSHINE_USER` | `admin` | Sunshine Web Dashboard username |
 | `SUNSHINE_PASS` | `admin123` | Sunshine Web Dashboard password |
 
 ### Step 4: Deploy Stack
-Click **Deploy the stack**. Portainer will launch the container stack and mount your `\\10.80.1.50\Public` network share.
+Click **Deploy the stack**. Portainer will launch the container stack and mount your `\\10.80.1.50\Public\Emulator\Roms` network share.
 
 ---
 
 ## 📁 Recommended Network ROM Storage Folder Structure
 
-On your `\\10.80.1.50\Public` share, place your ROMs inside `/roms`:
+On your `\\10.80.1.50\Public\Emulator\Roms` share:
 
 ```
-\\10.80.1.50\Public\roms\
+\\10.80.1.50\Public\Emulator\Roms\
+  ├── bios/           # EmulationStation & Emulator BIOS files
   ├── ps2/            # PlayStation 2 (.iso, .chd)
   ├── ps3/            # PlayStation 3 (.pkg, folder)
   ├── gc/             # GameCube (.rvz, .iso)
