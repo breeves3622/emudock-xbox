@@ -6,14 +6,15 @@ services:
     container_name: wolf-emulator-stack
     network_mode: host
     restart: unless-stopped
+    privileged: true
     environment:
-      - PUID=${PUID:-1000}
-      - PGID=${PGID:-1000}
+      - PUID=0
+      - PGID=0
       - TZ=${TZ:-America/New_York}
       - WOLF_RENDER_NODE=/dev/dri/renderD128
       - WOLF_ENCODER_NODE=/dev/dri/renderD128
     volumes:
-      - ./config/wolf:/etc/wolf
+      - wolf-config:/etc/wolf
       - /var/run/docker.sock:/var/run/docker.sock:rw
       - /dev/:/dev/:rw
       - /run/udev:/run/udev:rw
@@ -26,10 +27,12 @@ services:
       - /dev/uhid:/dev/uhid
 
 volumes:
+  wolf-config:
+    name: wolf_config
   smb-roms-storage:
     name: smb_emulator_roms
     driver: local
     driver_opts:
       type: cifs
-      o: "username=${SMB_USER:-guest},password=${SMB_PASS:-},guest,uid=${PUID:-1000},gid=${PGID:-1000},vers=3.0"
+      o: "username=${SMB_USER:-guest},password=${SMB_PASS:-},guest,uid=0,gid=0,vers=3.0"
       device: "${SMB_ROMS_PATH:-//10.80.1.50/Public/Emulator/Roms}"
