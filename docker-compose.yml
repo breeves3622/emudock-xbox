@@ -13,11 +13,13 @@ services:
       - TZ=${TZ:-America/New_York}
       - SUNSHINE_USER=${SUNSHINE_USER:-admin}
       - SUNSHINE_PASS=${SUNSHINE_PASS:-admin123}
+      - SUNSHINE_CONFIG_DIR=/config
       - DISPLAY=:0
       - NVIDIA_VISIBLE_DEVICES=${NVIDIA_VISIBLE_DEVICES:-all}
       - NVIDIA_DRIVER_CAPABILITIES=${NVIDIA_DRIVER_CAPABILITIES:-all}
     volumes:
       - ./config/sunshine:/config
+      - ./config/sunshine:/home/lizard/.config/sunshine
       - ./config/es-de:/home/sunshine/.emulationstation
       - roms-storage:/roms
       - bios-storage:/bios

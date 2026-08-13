@@ -13,9 +13,11 @@ services:
       - TZ=${TZ:-America/New_York}
       - SUNSHINE_USER=${SUNSHINE_USER:-admin}
       - SUNSHINE_PASS=${SUNSHINE_PASS:-admin123}
+      - SUNSHINE_CONFIG_DIR=/config
       - DISPLAY=:0
     volumes:
       - ./config/sunshine:/config
+      - ./config/sunshine:/home/lizard/.config/sunshine
       - ./config/es-de:/home/sunshine/.emulationstation
       - nfs-roms-storage:/roms
       - nfs-bios-storage:/bios
