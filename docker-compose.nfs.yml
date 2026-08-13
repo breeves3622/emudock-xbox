@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   sunshine:
-    image: lizardbyte/sunshine:latest
+    image: ghcr.io/lizardbyte/sunshine:latest
     container_name: sunshine-emulator-stack
     restart: unless-stopped
     privileged: true
@@ -33,7 +33,7 @@ volumes:
     driver_opts:
       type: nfs
       o: "addr=${NFS_SERVER_IP},rw,soft,nolock,timeo=30"
-      device: ":${NFS_ROMS_PATH}" # e.g. :/volume1/roms
+      device: ":${NFS_ROMS_PATH}"
 
   nfs-bios-storage:
     name: nfs_emulator_bios
@@ -41,4 +41,4 @@ volumes:
     driver_opts:
       type: nfs
       o: "addr=${NFS_SERVER_IP},rw,soft,nolock,timeo=30"
-      device: ":${NFS_BIOS_PATH}" # e.g. :/volume1/bios
+      device: ":${NFS_BIOS_PATH}"
