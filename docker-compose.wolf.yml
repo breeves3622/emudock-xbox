@@ -26,6 +26,17 @@ services:
       - /dev/uinput:/dev/uinput
       - /dev/uhid:/dev/uhid
 
+  wolf-den:
+    image: ghcr.io/games-on-whales/wolf-den:latest
+    container_name: wolf-den-ui
+    network_mode: host
+    restart: unless-stopped
+    volumes:
+      - wolf-config:/etc/wolf
+      - /var/run/docker.sock:/var/run/docker.sock:rw
+    environment:
+      - PORT=8085
+
 volumes:
   wolf-config:
     name: wolf_config
